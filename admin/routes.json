@@ -1,0 +1,6 @@
+{
+  "admin.app.index": {
+    "component": "IndexCatalogueManager",
+    "path": "/admin/app/catalogue-manager"
+  }
+}
