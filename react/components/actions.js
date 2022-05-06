@@ -1,8 +1,21 @@
 
 export const sendData = async (data, dataImages) => {
-  // TODO: Hacer un post enviando los datos
-  console.log(data, dataImages);
-  return true;
+  var url = '/_v/sendData';
+var obj = {
+  data,
+  dataImages
+};
+
+fetch(url, {
+  method: 'POST',
+  body: JSON.stringify(obj),
+  headers:{
+    'Content-Type': 'application/json'
+  }
+}).then(res => res.json())
+.catch(error => console.error('Error:', error))
+.then(response => console.log('Success:', response));
+
 }
 
 

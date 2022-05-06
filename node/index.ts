@@ -1,7 +1,7 @@
 import { method, RecorderState, Service, ServiceContext } from '@vtex/api';
 
 import { Clients } from './clients';
-import { deleteCollection } from './handlers/deleteCollection'
+import { sendData } from './handlers/sendData'
 
 declare global {
   // We declare a global Context type just to avoid re-writing ServiceContext<Clients, State> in every handler and resolver
@@ -27,8 +27,8 @@ export default new Service({
 		},
 	},
 	routes: {
-    deleteCollection: method({
-      POST: [deleteCollection],
+    sendData: method({
+      POST: [sendData],
     })
 	},
 });

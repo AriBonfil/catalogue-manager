@@ -5,20 +5,8 @@
   "ttl": 300,
   "timeout": 100,
   "routes": {
-    "collections": {
-      "path": "/_v/collections",
-      "public": true
-    },
-    "collectionsDetail": {
-      "path": "/_v/collections/:id",
-      "public": true
-    },
-    "deleteCollection": {
-      "path": "/_v/collections/delete/:id",
-      "public": true
-    },
-    "cloneCollection": {
-      "path": "/_v/collections/clone/:id",
+    "sendData": {
+      "path": "/_v/sendData",
       "public": true
     }
   }

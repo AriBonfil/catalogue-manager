@@ -1,10 +1,10 @@
 import { IOClients } from '@vtex/api';
-import Collection from './collection';
+import Sender from './sender'
 
 
 export class Clients extends IOClients {
-	public get collection () {
-		return this.getOrSet('collections', Collection);
+	public get sender () {
+		return this.getOrSet('sender', Sender);
 	}
 
 }
