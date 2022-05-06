@@ -9,3 +9,10 @@ export interface ISpecifications {
   fieldValue?: String,
   specificationValue?: String,
 }
+export interface IUpdateSpecifications { 
+  id: Number,
+  skuId: Number,
+  fieldId: Number,
+  fieldValueId: Number,
+  text: String
+}
