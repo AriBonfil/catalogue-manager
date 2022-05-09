@@ -73,7 +73,7 @@ const {
         let updateObject : Object = {
           "Id": specificationCode,
           "FieldId": fieldId,
-          "FieldValueId": fieldValueId,
+          "FieldValueId": specificationCode,
           "Text": spec.SpecificationValue
         }
       console.log("new Specification", updateObject, "skuid", skuId)

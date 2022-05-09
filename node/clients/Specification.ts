@@ -3,17 +3,14 @@ import { ExternalClient } from '@vtex/api'
 import {INewSpecification} from '../interfaces'
 export default class Specification extends ExternalClient {
   constructor(context: IOContext, options?: InstanceOptions) {
-    super(`http://${context.account}.vtexcommercestable.com.br`,
-      context,
-      {
-        ...(options ?? {}),
-        headers: {
-          ...(options?.headers ?? {}),
-          'Content-Type': 'application/json',
-          'VtexIdclientAutCookie': context.adminUserAuthToken || context.authToken,
-        },
-      }
-    )
+    super(`http://${context.account}.vtexcommercestable.com.br`, context, {
+      ...(options ?? {}),
+      headers: {
+        ...(options?.headers ?? {}),
+        'Content-Type': 'application/json',
+        VtexIdclientAutCookie: context.adminUserAuthToken || context.authToken,
+      },
+    })
   }
 
 
