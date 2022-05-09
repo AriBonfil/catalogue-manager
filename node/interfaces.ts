@@ -9,3 +9,12 @@ export interface ISpecifications {
   fieldValue?: String,
   specificationValue?: String,
 }
+export interface INewSpecification {
+  fieldTypeId?: String,
+  fieldGroupId?: String,
+  name?: String
+}
+export interface ILog {
+  success?: boolean
+  errors?: Array<any>
+}

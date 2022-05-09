@@ -1,7 +1,7 @@
 import type { InstanceOptions, IOContext } from '@vtex/api'
 import { ExternalClient } from '@vtex/api'
-
-export default class Sender extends ExternalClient {
+import {INewSpecification} from '../interfaces'
+export default class Specification extends ExternalClient {
   constructor(context: IOContext, options?: InstanceOptions) {
     super(`http://${context.account}.vtexcommercestable.com.br`,
       context,
@@ -16,10 +16,12 @@ export default class Sender extends ExternalClient {
     )
   }
 
-  public async test(): Promise<any> {
-    console.log("TEST OK");
-    return
-    /* var config = {headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin' : '*',}};
-    return await this.http.delete(`api/catalog/pvt/collection/${id}`, config); */
+
+  public async createSpecification(newSpecification: INewSpecification): Promise<any> {
+    var config = {
+      body: newSpecification,
+      headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin' : '*',}
+    };
+    return await this.http.post(`/api/catalog/pvt/specification`, config);
   }
 }

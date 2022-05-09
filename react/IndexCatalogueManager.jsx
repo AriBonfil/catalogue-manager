@@ -38,7 +38,6 @@ const readfileImages = (e) => {
       reader.readAsArrayBuffer(e.target.files[0]);
   }
 }
-  console.log("asddsada", data, dataImages);
   return (
     <div>
 <form>
