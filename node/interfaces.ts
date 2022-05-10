@@ -12,7 +12,8 @@ export interface ISpecifications {
 export interface INewSpecification {
   fieldTypeId?: String,
   fieldGroupId?: String,
-  name?: String
+  name?: String,
+  skuId?: String,
 }
 export interface ILog {
   success?: boolean

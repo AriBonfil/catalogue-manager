@@ -1,6 +1,5 @@
 import type { InstanceOptions, IOContext } from '@vtex/api'
 import { ExternalClient } from '@vtex/api'
-import {INewSpecification} from '../interfaces'
 export default class Specification extends ExternalClient {
   constructor(context: IOContext, options?: InstanceOptions) {
     super(`http://${context.account}.vtexcommercestable.com.br`, context, {
@@ -14,11 +13,20 @@ export default class Specification extends ExternalClient {
   }
 
 
-  public async createSpecification(newSpecification: INewSpecification): Promise<any> {
-    var config = {
-      body: newSpecification,
-      headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin' : '*',}
-    };
-    return await this.http.post(`/api/catalog/pvt/specification`, config);
+  public async associateProductSpecification(skuId : Number, reqBody: any): Promise<any> {
+    try {
+      let data = [
+        {
+            "Value": [
+              `${reqBody.Text}`
+            ],
+            "Id": reqBody.FieldId
+        },
+    ]
+      let response = await this.http.post(`/api/catalog_system/pvt/products/${skuId}/specification`, data);
+      return response
+    } catch (error) {
+        return error
+    }
   }
 }
