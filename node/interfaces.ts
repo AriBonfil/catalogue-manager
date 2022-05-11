@@ -16,6 +16,8 @@ export interface INewSpecification {
   skuId?: String,
 }
 export interface ILog {
-  success?: boolean
-  errors?: Array<any>
+  skuId?: Number,
+  specificationId?: Number,
+  success?: boolean,
+  message?: String
 }
