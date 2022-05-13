@@ -1,3 +1,7 @@
+main {
+  margin: 0 2rem;
+}
+
 section {
   background-color: #fff;
   margin: 4rem auto;
@@ -80,7 +84,7 @@ button {
   width: 100%;
   outline: none;
   border: none;
-  height: 50px;
+  padding: 0.8rem;
   font-size: 1.25rem;
   font-weight: 700;
   color: #fff;
@@ -91,4 +95,36 @@ button {
 
 button:hover {
   filter: brightness(0.95);
+}
+
+@media (max-width: 1160px) {
+  div input + label {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: stretch;
+    height: 80px;
+  }
+
+  div input + label span {
+    text-align: left;
+  }
+}
+
+@media (max-width: 762px) {
+  section {
+    padding: 2rem;
+  }
+
+  div {
+    margin-bottom: 2rem;
+  }
+
+  div input + label,
+  button {
+    font-size: 1rem;
+  }
+
+  div input + label strong {
+    min-width: 0;
+  }
 }
