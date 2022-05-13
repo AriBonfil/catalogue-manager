@@ -22,6 +22,7 @@
     "@vtex/test-tools": "^3.3.2",
     "@vtex/tsconfig": "^0.4.4",
     "apollo-cache-inmemory": "^1.6.5",
+    "babel-eslint": "^10.1.0",
     "graphql": "^14.6.0",
     "typescript": "3.9.7"
   }
