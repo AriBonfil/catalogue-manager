@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import * as XLSX from 'xlsx'
-//import { sendData } from './components/actions'
+import { sendData } from './components/actions'
 import { TableData } from './TableData'
 
 import './index.global.css'
@@ -32,22 +32,17 @@ const index = () => {
         const json = XLSX.utils.sheet_to_json(worksheet)
         setDataFiles({ ...dataFiles, [name]: json })
       }
-      //setNamaFileImages(event.target.files[0].name)
-      console.log('name', name)
-      console.log('teste: ', event.target.files[0].name)
 
       name === 'data'
         ? setNameFileData(event.target.files[0].name)
         : setNameFileImages(event.target.files[0].name)
       reader.readAsArrayBuffer(event.target.files[0])
     }
-
-    console.log(dataFiles)
   }
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    //sendData(data, dataImages)
+    sendData(dataFiles.data, dataFiles.dataImages)
     setDataFiles({
       data: [],
       dataImages: [],
