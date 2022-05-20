@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import * as XLSX from 'xlsx'
-import { sendData } from './components/actions'
-import { TableData } from './TableData'
+import TableData from './TableData'
 
 import './index.global.css'
 
@@ -19,6 +18,7 @@ const index = () => {
     data: [],
     dataImages: [],
   })
+  const [responseLog, setResponseLog] = useState()
 
   const handleInputChange = (event) => {
     const { name } = event.currentTarget
@@ -42,7 +42,22 @@ const index = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    sendData(dataFiles.data, dataFiles.dataImages)
+    var url = '/_v/sendData'
+    let data = dataFiles.data
+    let dataImages = dataFiles.dataImages
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({data, dataImages}),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log("res que setea", response)
+        setResponseLog(response)
+      })
+      .catch((error) => console.error('Error:', error))
     setDataFiles({
       data: [],
       dataImages: [],
@@ -50,7 +65,7 @@ const index = () => {
     setNameFileImages(null)
     setNameFileData(null)
   }
-
+  console.log("state del response log", responseLog);
   return (
     <main>
       <section className="container">
@@ -116,7 +131,8 @@ const index = () => {
           </button>
         </form>
       </section>
-      <TableData />
+      {responseLog && responseLog.length > 0 &&
+      <TableData props={responseLog}/>}
     </main>
   )
 }

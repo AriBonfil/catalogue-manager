@@ -3,11 +3,10 @@ import { /* ILog */ /* INewSpecification */ } from '../interfaces'
 export async function sendData(ctx: Context, next: () => Promise<any>) {
   const body: any = await json(ctx.req)
   let { specifications } = parseBody(body)
-  /* let resultLog = createSpecifications(specifications, ctx) */
-  let processLog = associateProductSpecificationHandler(specifications, ctx)
+  let log = await associateProduct(specifications, ctx)
+  ctx.body=log
   ctx.status = 200
   ctx.set('cache-control', 'no-cache')
-  ctx.body = processLog
   await next()
 }
 const parseBody = (body: any) => {
@@ -40,63 +39,33 @@ function searchValueByImpartialKey(nameKey: any, obj: any) {
   }
 }
 
-const associateProductSpecificationHandler = (
-  specifications: Array<any>,
-  ctx: Context
-) => {
+const associateProduct = async (specifications: any, ctx: any) => {
   const {
     clients: { specification },
   } = ctx
-  if (specifications.length > 0) {
-    let log: Array<any> = []
-    specifications.forEach(async (spec) => {
-      let skuId = parseFloat(searchValueByImpartialKey('_ProductId', spec))
-      /* let fieldTypeName = searchValueByImpartialKey('FieldTypeName', spec) */
-      let fieldId = searchValueByImpartialKey('FieldId', spec)
-      let text = searchValueByImpartialKey('SpecificationValue', spec)
-      let logItem: any = {}
-   /*    if (fieldTypeName == 'CheckBox') {
-        logItem = {
-          skuId: skuId,
-          specificationId: parseFloat(fieldId),
-          success: false,
-          message: `El valor ${text} para la especificacion ${parseFloat(
-            fieldId
-          )} de tipo CheckBox no se puedo actualizar`,
-        }
-      } else { */
+  if(specifications.length > 0) {
+   return await Promise.all(
+      specifications.map(async (spec: any) => {
+        let skuId = parseFloat(searchValueByImpartialKey('_ProductId', spec))
+        let fieldId = searchValueByImpartialKey('FieldId', spec)
+        let text = searchValueByImpartialKey('SpecificationValue', spec)
         let reqBody: any = {
-          Id: parseFloat(fieldId),
-          Value: text,
+            Id: parseFloat(fieldId),
+            Value: text,
         }
-        await specification
-          .associateProductSpecification(skuId, reqBody)
-          .then((response: any) => {
-            logItem = {
-              skuId: response.skuId,
-              specificationId: response.specificationId,
-              success: response.success,
-              message: response.message,
-            }
-
+        return await specification.associateProductSpecification(skuId, reqBody)
+            .then((response: any) => {
+              return response
+            })
+            .catch((error: any) => {
+              return error
+            })
           })
-          .catch((error: any) => {
-            console.log(error)
-            logItem = {
-              skuId: skuId,
-              specificationId: parseFloat(fieldId),
-              success: false,
-              message: 'Algo salio mal',
-            }
-          })
-     /*  } */
-      console.log("logitem", logItem)
-      log.push(logItem)
-    })
-    return log
+   )
   }
-  return false
+  return
 }
+
 
 /* const createSpecifications = (specifications : Array<any>, ctx: Context) => {
   let log : Array<ILog> = []

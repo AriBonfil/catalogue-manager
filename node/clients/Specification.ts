@@ -33,12 +33,12 @@ export default class Specification extends ExternalClient {
         "message": `El valor ${reqBody.Value} para la especificacion ${reqBody.Id} del Sku Id ${skuId} se actualizo correctamente`
       }
     } catch (error) {
-      console.log("error de la api vtex", error)
+      console.log("error de la api vtex", )
       logItem = {
         "skuId": skuId,
         "specificationId": reqBody.Id,
         "success": false,
-        "message": "Algo salio mal"
+        "message": error.response.data
       }
     }
     return logItem
