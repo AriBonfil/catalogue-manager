@@ -2,9 +2,11 @@ import { json } from 'co-body'
 import { /* ILog */ /* INewSpecification */ } from '../interfaces'
 export async function sendData(ctx: Context, next: () => Promise<any>) {
   const body: any = await json(ctx.req)
-  let { specifications } = parseBody(body)
-  let log = await associateProduct(specifications, ctx)
-  ctx.body=log
+  let { specifications, images} = parseBody(body)
+  let logSpecifications = await associateProduct(specifications, ctx)
+  let logImages = await associateProductImage(images, ctx)
+  console.log("kig images", logImages)
+  ctx.body= {logSpec: logSpecifications, logImages: logImages}
   ctx.status = 200
   ctx.set('cache-control', 'no-cache')
   await next()
@@ -13,6 +15,7 @@ const parseBody = (body: any) => {
   var bodyObj = Object.keys(body).map(function (key) {
     return [Number(key), body[key]]
   })
+
   let specifications: Array<any> = []
   let images: Array<any> = []
   bodyObj[0][1].forEach((s: any) => {
@@ -66,25 +69,30 @@ const associateProduct = async (specifications: any, ctx: any) => {
   return
 }
 
-
-/* const createSpecifications = (specifications : Array<any>, ctx: Context) => {
-  let log : Array<ILog> = []
+const associateProductImage = async (images: any, ctx: any) => {
   const {
     clients: { specification },
   } = ctx
-  if(specifications.length > 0)
-  {
-    specifications.forEach((spec) => {
-     let fieldIdValue =  searchValueByImpartialKey("FieldId", spec)
-     let fieldNameValue =  searchValueByImpartialKey("FieldName", spec)
-        let newSpecification : INewSpecification= {
-          'fieldTypeId': '1',
-          'fieldGroupId': fieldIdValue,
-          'name': fieldNameValue
+  if(images.length > 0) {
+   return await Promise.all(
+    images.map(async (i: any) => {
+        let skuId = parseFloat(searchValueByImpartialKey('IdSku', i))
+        let imageUrl = searchValueByImpartialKey('URL', i)
+        /* let imageName = searchValueByImpartialKey('NomeImagem', i) */
+        let imageText = searchValueByImpartialKey('TextoImagem', i)
+        let reqBody: any = {
+            imageName: imageText,
+            imageUrl: imageUrl
         }
-      console.log("new Specification", newSpecification)
-      specification.createSpecification(newSpecification)
-    })
+        return await specification.associateProductImage(skuId, reqBody)
+            .then((response: any) => {
+              return response
+            })
+            .catch((error: any) => {
+              return error
+            })
+          })
+   )
   }
-  return log
-} */
+  return
+}

@@ -30,6 +30,7 @@ table th,
 table td {
   padding: 0.625em;
   text-align: center;
+  word-wrap: break-word;
 }
 
 table th {

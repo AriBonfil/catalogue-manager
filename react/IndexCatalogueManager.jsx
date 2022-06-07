@@ -47,14 +47,14 @@ const index = () => {
     let dataImages = dataFiles.dataImages
     fetch(url, {
       method: 'POST',
-      body: JSON.stringify({data, dataImages}),
+      body: JSON.stringify({data:data, dataImages:dataImages}),
       headers: {
         'Content-Type': 'application/json',
       },
     })
       .then((res) => res.json())
       .then((response) => {
-        console.log("res que setea", response)
+        console.log("response logg", response)
         setResponseLog(response)
       })
       .catch((error) => console.error('Error:', error))
@@ -65,7 +65,6 @@ const index = () => {
     setNameFileImages(null)
     setNameFileData(null)
   }
-  console.log("state del response log", responseLog);
   return (
     <main>
       <section className="container">
@@ -117,12 +116,12 @@ const index = () => {
           <button
             type="submit"
             disabled={
-              dataFiles.data.length > 0 && dataFiles.dataImages.length > 0
+              dataFiles.data.length > 0 || dataFiles.dataImages.length > 0
                 ? ''
                 : true
             }
             style={
-              dataFiles.data.length > 0 && dataFiles.dataImages.length > 0
+              dataFiles.data.length > 0 || dataFiles.dataImages.length > 0
                 ? undefined
                 : ButtonStyle
             }
@@ -131,7 +130,7 @@ const index = () => {
           </button>
         </form>
       </section>
-      {responseLog && responseLog.length > 0 &&
+      {responseLog &&
       <TableData props={responseLog}/>}
     </main>
   )

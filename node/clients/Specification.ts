@@ -33,7 +33,6 @@ export default class Specification extends ExternalClient {
         "message": `El valor ${reqBody.Value} para la especificacion ${reqBody.Id} del Sku Id ${skuId} se actualizo correctamente`
       }
     } catch (error) {
-      console.log("error de la api vtex", )
       logItem = {
         "skuId": skuId,
         "specificationId": reqBody.Id,
@@ -43,4 +42,34 @@ export default class Specification extends ExternalClient {
     }
     return logItem
   }
+
+  public async associateProductImage(skuId : Number, reqBody: any): Promise<any> {
+    let data = {
+      skuId: skuId,
+      Name: reqBody.imageName,
+      Url: reqBody.imageUrl
+    }
+    let logItem :any = {}
+    console.log("reqBody", data)
+  try {
+    await this.http.post(`/api/catalog/pvt/stockkeepingunit/${skuId}/file`, data);
+    logItem = {
+      "skuId": skuId,
+      "imageName": reqBody.imageName,
+      "imageUrl": reqBody.imageUrl,
+      "success": true,
+      "message": `La imagen ${reqBody.imageName} de url ${reqBody.imageUrl} del Sku Id ${skuId} se actualizo correctamente`
+    }
+  } catch (error) {
+    console.log("errorr", error);
+    logItem = {
+      "skuId": skuId,
+      "imageName": reqBody.imageName,
+      "imageUrl": reqBody.imageUrl,
+      "success": false,
+      "message": error.response.data.Message
+    }
+  }
+  return logItem
+}
 }
