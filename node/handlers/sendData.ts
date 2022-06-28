@@ -5,7 +5,6 @@ export async function sendData(ctx: Context, next: () => Promise<any>) {
   let { specifications, images} = parseBody(body)
   let logSpecifications = await associateProduct(specifications, ctx)
   let logImages = await associateProductImage(images, ctx)
-  console.log("kig images", logImages)
   ctx.body= {logSpec: logSpecifications, logImages: logImages}
   ctx.status = 200
   ctx.set('cache-control', 'no-cache')

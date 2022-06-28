@@ -42,7 +42,7 @@ const index = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    var url = '/_v/sendData'
+    var url = `/_v/sendData?v=${Math.random()}`
     let data = dataFiles.data
     let dataImages = dataFiles.dataImages
     fetch(url, {
