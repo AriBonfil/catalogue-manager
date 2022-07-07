@@ -1,6 +1,6 @@
 import type { InstanceOptions, IOContext } from '@vtex/api'
 import { ExternalClient } from '@vtex/api'
-import {ILog} from '../interfaces'
+import { ILog } from '../interfaces'
 
 export default class Specification extends ExternalClient {
   constructor(context: IOContext, options?: InstanceOptions) {
@@ -51,76 +51,75 @@ export default class Specification extends ExternalClient {
     skuId: Number,
     reqBody: any
   ): Promise<any> {
-
     let dataPost = {
       skuId: skuId,
       Name: reqBody.imageName,
       Url: reqBody.imageUrl,
     }
 
-  /*   let dataPut = {
-      Name: reqBody.imageName,
-      Url: reqBody.imageUrl
-    } */
-
     let logItem: any = {}
 
-
-try {
-  await this.http.get(`/api/catalog/pvt/stockkeepingunit/${skuId}/file`)
-  .then((response: any[]) => {
-   if(response)
-   {
-     let imageExist = response.find(i => i.Name === reqBody.imageName)
-      if(!imageExist){
-        try {
-          this.http.post(`/api/catalog/pvt/stockkeepingunit/${skuId}/file`, dataPost);
-          logItem = {
-            "skuId": skuId,
-            "imageName": reqBody.imageName,
-            "imageUrl": reqBody.imageUrl,
-            "success": true,
-            "message": `La imagen ${reqBody.imageName} de url ${reqBody.imageUrl} del Sku Id ${skuId} se agrego correctamente`
+    try {
+      await this.http
+        .get(`/api/catalog/pvt/stockkeepingunit/${skuId}/file`)
+        .then((response: any[]) => {
+          if (response) {
+            let imageExist = response.find((i) => i.Name === reqBody.imageName)
+            if (!imageExist) {
+              try {
+                this.http.post(
+                  `/api/catalog/pvt/stockkeepingunit/${skuId}/file`,
+                  dataPost
+                )
+                logItem = {
+                  skuId: skuId,
+                  imageName: reqBody.imageName,
+                  imageUrl: reqBody.imageUrl,
+                  success: true,
+                  message: `La imagen ${reqBody.imageName} de url ${reqBody.imageUrl} del Sku Id ${skuId} se agrego correctamente`,
+                }
+              } catch (error) {
+                console.log('errorr', error)
+                logItem = {
+                  skuId: skuId,
+                  imageName: reqBody.imageName,
+                  imageUrl: reqBody.imageUrl,
+                  success: false,
+                  message: error.response.data.Message,
+                }
+              }
+            } else {
+              try {
+                this.http.delete(
+                  `/api/catalog/pvt/stockkeepingunit/${skuId}/file/${imageExist.Id}`
+                )
+                this.http.post(
+                  `/api/catalog/pvt/stockkeepingunit/${skuId}/file`,
+                  dataPost
+                )
+                logItem = {
+                  skuId: skuId,
+                  imageName: reqBody.imageName,
+                  imageUrl: reqBody.imageUrl,
+                  success: true,
+                  message: `La imagen ${reqBody.imageName} de url ${reqBody.imageUrl} del Sku Id ${skuId} se actualizo correctamente`,
+                }
+              } catch (error) {
+                console.log('errorr', error)
+                logItem = {
+                  skuId: skuId,
+                  imageName: reqBody.imageName,
+                  imageUrl: reqBody.imageUrl,
+                  success: false,
+                  message: error.response.data.Message,
+                }
+              }
+            }
           }
-        } catch (error) {
-          console.log("errorr", error);
-          logItem = {
-            "skuId": skuId,
-            "imageName": reqBody.imageName,
-            "imageUrl": reqBody.imageUrl,
-            "success": false,
-            "message": error.response.data.Message
-          }
-        }
-      }
-      else {
-       /*   try { */
-        /*    console.log(`/api/catalog/pvt/stockkeepingunit/${skuId}/file/${imageExist.Id}`)
-          this.http.put(`/api/catalog/pvt/stockkeepingunit/${skuId}/file/${imageExist.Id}`, dataPut); */
-          logItem = {
-            "skuId": skuId,
-            "imageName": reqBody.imageName,
-            "imageUrl": reqBody.imageUrl,
-            "success": false,
-            "message": `La imagen que desea agregar ya existe`
-          }
-   /*      } catch (error) {
-          console.log("errorr", error);
-          logItem = {
-            "skuId": skuId,
-            "imageName": reqBody.imageName,
-            "imageUrl": reqBody.imageUrl,
-            "success": false,
-            "message": error.response.data.Message
-          }
-        } */
-      }
-   }
-  })
-} catch (error) {
-  console.log("errror", error)
-}
-   return logItem
+        })
+    } catch (error) {
+      console.log('errror', error)
+    }
+    return logItem
   }
-
 }
