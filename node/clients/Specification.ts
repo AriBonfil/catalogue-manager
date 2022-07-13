@@ -49,7 +49,8 @@ export default class Specification extends ExternalClient {
 
   public async associateProductImage(
     skuId: Number,
-    reqBody: any
+    reqBody: any ,
+    replaceImages: boolean
   ): Promise<any> {
     let dataPost = {
       skuId: skuId,
@@ -58,7 +59,6 @@ export default class Specification extends ExternalClient {
     }
 
     let logItem: any = {}
-
     try {
       await this.http
         .get(`/api/catalog/pvt/stockkeepingunit/${skuId}/file`)
@@ -89,31 +89,42 @@ export default class Specification extends ExternalClient {
                 }
               }
             } else {
-              try {
-                this.http.delete(
-                  `/api/catalog/pvt/stockkeepingunit/${skuId}/file/${imageExist.Id}`
-                )
-                this.http.post(
-                  `/api/catalog/pvt/stockkeepingunit/${skuId}/file`,
-                  dataPost
-                )
-                logItem = {
-                  skuId: skuId,
-                  imageName: reqBody.imageName,
-                  imageUrl: reqBody.imageUrl,
-                  success: true,
-                  message: `La imagen ${reqBody.imageName} de url ${reqBody.imageUrl} del Sku Id ${skuId} se actualizo correctamente`,
-                }
-              } catch (error) {
-                console.log('errorr', error)
-                logItem = {
-                  skuId: skuId,
-                  imageName: reqBody.imageName,
-                  imageUrl: reqBody.imageUrl,
-                  success: false,
-                  message: error.response.data.Message,
+              if(replaceImages){
+                try {
+                  this.http.delete(
+                    `/api/catalog/pvt/stockkeepingunit/${skuId}/file/${imageExist.Id}`
+                  )
+                  this.http.post(
+                    `/api/catalog/pvt/stockkeepingunit/${skuId}/file`,
+                    dataPost
+                  )
+                  logItem = {
+                    skuId: skuId,
+                    imageName: reqBody.imageName,
+                    imageUrl: reqBody.imageUrl,
+                    success: true,
+                    message: `La imagen ${reqBody.imageName} de url ${reqBody.imageUrl} del Sku Id ${skuId} se actualizo correctamente`,
+                  }
+                } catch (error) {
+                  console.log('errorr', error)
+                  logItem = {
+                    skuId: skuId,
+                    imageName: reqBody.imageName,
+                    imageUrl: reqBody.imageUrl,
+                    success: false,
+                    message: error.response.data.Message,
+                  }
                 }
               }
+             else{
+              logItem = {
+                skuId: skuId,
+                imageName: reqBody.imageName,
+                imageUrl: reqBody.imageUrl,
+                success: false,
+                message: `La imagen ${reqBody.imageName} de url ${reqBody.imageUrl} del Sku Id ${skuId} no se actualizo ya que asi se determino previamente`,
+              }
+             }
             }
           }
         })

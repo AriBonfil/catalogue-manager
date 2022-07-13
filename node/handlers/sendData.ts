@@ -3,8 +3,9 @@ import { /* ILog */ /* INewSpecification */ } from '../interfaces'
 export async function sendData(ctx: Context, next: () => Promise<any>) {
   const body: any = await json(ctx.req)
   let { specifications, images} = parseBody(body)
+
   let logSpecifications = await associateProduct(specifications, ctx)
-  let logImages = await associateProductImage(images, ctx)
+  let logImages = await associateProductImage(images, ctx , body.replaceImages )
   ctx.body= {logSpec: logSpecifications, logImages: logImages}
   ctx.status = 200
   ctx.set('cache-control', 'no-cache')
@@ -68,7 +69,7 @@ const associateProduct = async (specifications: any, ctx: any) => {
   return
 }
 
-const associateProductImage = async (images: any, ctx: any) => {
+const associateProductImage = async (images: any, ctx: any , replaceImages: boolean ) => {
   const {
     clients: { specification },
   } = ctx
@@ -83,7 +84,7 @@ const associateProductImage = async (images: any, ctx: any) => {
             imageName: imageText,
             imageUrl: imageUrl
         }
-        return await specification.associateProductImage(skuId, reqBody)
+        return await specification.associateProductImage(skuId, reqBody , replaceImages )
             .then((response: any) => {
               return response
             })

@@ -71,6 +71,3 @@ const TableData = ({ props }) => {
   )
 }
 export default TableData
-/* {
-
-              } */

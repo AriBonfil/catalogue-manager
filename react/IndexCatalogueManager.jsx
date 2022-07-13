@@ -19,7 +19,7 @@ const index = () => {
     dataImages: [],
   })
   const [responseLog, setResponseLog] = useState()
-
+  const [replaceRepeatedImages, setReplaceRepeatedImages] = useState(true)
   const handleInputChange = (event) => {
     const { name } = event.currentTarget
     if (event.target.files) {
@@ -45,16 +45,21 @@ const index = () => {
     var url = `/_v/sendData?v=${Math.random()}`
     let data = dataFiles.data
     let dataImages = dataFiles.dataImages
+    console.log("RERERE", replaceRepeatedImages);
     fetch(url, {
       method: 'POST',
-      body: JSON.stringify({data:data, dataImages:dataImages}),
+      body: JSON.stringify({
+        data: data,
+        dataImages: dataImages,
+        replaceImages: replaceRepeatedImages,
+      }),
       headers: {
         'Content-Type': 'application/json',
       },
     })
       .then((res) => res.json())
       .then((response) => {
-        console.log("response logg", response)
+        console.log('response logg', response)
         setResponseLog(response)
       })
       .catch((error) => console.error('Error:', error))
@@ -92,6 +97,8 @@ const index = () => {
             </label>
           </div>
           <div>
+          
+
             <input
               type="file"
               name="dataImages"
@@ -112,6 +119,20 @@ const index = () => {
                 Choose a file image…
               </strong>
             </label>
+            <div>
+              <p>
+                En caso de haber images ya existentes, desea reemplazar la url
+                origen de la imagen?
+              </p>
+              <select
+                id="replace"
+                onChange={(e) => setReplaceRepeatedImages(e.target.value === 'true' ? true : false)}
+                value={replaceRepeatedImages}
+              >
+                <option value='true'>Si</option>
+                <option value='false'>No</option>
+              </select>
+            </div>
           </div>
           <button
             type="submit"
@@ -130,8 +151,7 @@ const index = () => {
           </button>
         </form>
       </section>
-      {responseLog &&
-      <TableData props={responseLog}/>}
+      {responseLog && <TableData props={responseLog} />}
     </main>
   )
 }
