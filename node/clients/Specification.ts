@@ -61,12 +61,15 @@ export default class Specification extends ExternalClient {
     let logItem: any = {}
     try {
       await this.http
-        .get(`/api/catalog/pvt/stockkeepingunit/${skuId}/file`)
+        .get(`/api/catalog/pvt/stockkeepingunit/${skuId}/file?${Date.now()}`)
         .then((response: any[]) => {
           if (response) {
-            let imageExist = response.find((i) => i.Name === reqBody.imageName)
+            let imageExist = response.find((i) => i.Name == reqBody.imageName)
             if (!imageExist) {
               try {
+                this.http.delete(
+                  `/api/catalog/pvt/stockkeepingunit/${skuId}/file/${imageExist.Id}`
+                )
                 this.http.post(
                   `/api/catalog/pvt/stockkeepingunit/${skuId}/file`,
                   dataPost

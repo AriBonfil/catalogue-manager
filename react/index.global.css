@@ -96,7 +96,28 @@ button {
 button:hover {
   filter: brightness(0.95);
 }
-
+.replaceImagesSelector {
+  display: flex;
+  justify-content: flex-start;
+}
+.replaceImagesSelector select{
+  background-color: #d3394c;
+  border-radius: 4px;
+  display: inline-block;
+  font: inherit;
+  line-height: 1.5em;
+  height: 2rem;
+  width: auto;
+  box-sizing: border-box;
+  align-self: center;
+  color: #fff;
+}
+.preLogInformative
+{
+  text-align: center;
+  color: #d3394c;
+  text-transform: uppercase;
+}
 @media (max-width: 1160px) {
   div input + label {
     flex-direction: column;

@@ -19,7 +19,7 @@ const index = () => {
     dataImages: [],
   })
   const [responseLog, setResponseLog] = useState()
-  const [replaceRepeatedImages, setReplaceRepeatedImages] = useState(true)
+  const [replaceRepeatedImages, setReplaceRepeatedImages] = useState(null)
   const handleInputChange = (event) => {
     const { name } = event.currentTarget
     if (event.target.files) {
@@ -45,7 +45,6 @@ const index = () => {
     var url = `/_v/sendData?v=${Math.random()}`
     let data = dataFiles.data
     let dataImages = dataFiles.dataImages
-    console.log("RERERE", replaceRepeatedImages);
     fetch(url, {
       method: 'POST',
       body: JSON.stringify({
@@ -70,6 +69,7 @@ const index = () => {
     setNameFileImages(null)
     setNameFileData(null)
   }
+
   return (
     <main>
       <section className="container">
@@ -119,7 +119,7 @@ const index = () => {
                 Choose a file image…
               </strong>
             </label>
-            <div>
+            <div className="replaceImagesSelector">
               <p>
                 En caso de haber images ya existentes, desea reemplazar la url
                 origen de la imagen?
@@ -128,7 +128,9 @@ const index = () => {
                 id="replace"
                 onChange={(e) => setReplaceRepeatedImages(e.target.value === 'true' ? true : false)}
                 value={replaceRepeatedImages}
+                defaultValue={null}
               >
+                <option value={null}>Seleccione una opcion</option>
                 <option value='true'>Si</option>
                 <option value='false'>No</option>
               </select>
@@ -137,12 +139,12 @@ const index = () => {
           <button
             type="submit"
             disabled={
-              dataFiles.data.length > 0 || dataFiles.dataImages.length > 0
+              dataFiles.data.length > 0 || dataFiles.dataImages.length > 0 && replaceRepeatedImages !== null
                 ? ''
                 : true
             }
             style={
-              dataFiles.data.length > 0 || dataFiles.dataImages.length > 0
+              dataFiles.data.length > 0 || dataFiles.dataImages.length > 0 && replaceRepeatedImages !== null
                 ? undefined
                 : ButtonStyle
             }
@@ -151,7 +153,7 @@ const index = () => {
           </button>
         </form>
       </section>
-      {responseLog && <TableData props={responseLog} />}
+      {responseLog ? <TableData props={responseLog} /> : <div className='preLogInformative'>Cargue la/las planillas y espere a visualizar el Log aqui</div>}
     </main>
   )
 }
