@@ -13,6 +13,9 @@
     "styles": "2.x",
     "graphql": "1.x"
   },
+  "billingOptions": {
+    "free": true
+  },
   "dependencies": {
     "vtex.styleguide": "9.x"
   },
